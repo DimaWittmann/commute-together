@@ -48,3 +48,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+commute_together.sublime-workspace
+commute_together.sublime-project
+db.sqlite3
