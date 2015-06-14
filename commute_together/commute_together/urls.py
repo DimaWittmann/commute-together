@@ -7,4 +7,8 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^meeting/new/', 'commute_together.views.new_meeting', name='new_meeting'),
+    url(r'^meeting/(\d+)/$', 'commute_together.views.meeting', name='meeting'),
+    url(r'^meeting/$', 'commute_together.views.home', name='home'),
+
 )

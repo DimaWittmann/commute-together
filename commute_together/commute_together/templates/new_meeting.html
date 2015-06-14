@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}New meeting{% endblock %}
+{% block content %}
+	<form action="/meeting/new/" method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Add appointment">
+	</form>
+{% endblock %}

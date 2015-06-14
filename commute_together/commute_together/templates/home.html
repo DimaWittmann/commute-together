@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Commute together{% endblock %}
+{% block content %}
+	<form action="/meeting/new/" method="GET">
+		<input type="submit" value="New appointment">
+	</form>
+
+	{% for item in appointments %}
+		<span><a href="/meeting/{{item.id}}">{{item.name}}</a>:{{item.date}}</span>
+	{% endfor %}
+{% endblock %}
