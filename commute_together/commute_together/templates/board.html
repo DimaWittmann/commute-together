@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Board{% endblock %}
+{% block content %}
+
+	<table>
+		<thead>
+			<th>Departure</th> 
+			<th></th>
+			<th>Arrival</th>
+			<th></th>
+		</thead>
+		{% for thread in board.threads %}
+		<tr>	
+			<td><a href="http://localhost:8000/meeting/new/?place={{thread.from.title}}&date={{thread.departure}}&name={{thread.thread.title}} by {{thread.thread.transport_type}}">{{ thread.from.title }}</a></td>
+			<td>{{ thread.departure }}</td>
+
+
+			<td><a href="http://localhost:8000/meeting/new/?place={{thread.to.title}}&date={{thread.arrival}}&name={{thread.thread.title}} by {{thread.thread.transport_type}}">{{ thread.to.title }}</a></td>
+			<td>{{ thread.arrival }}</td>
+		</tr>
+		{% endfor %}
+
+
+	</table>
+{% endblock %}
