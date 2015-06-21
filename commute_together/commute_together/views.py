@@ -1,9 +1,12 @@
 import json
+import urllib
+import re
 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 
 from commute_together.forms import MeetingForm
-from commute_together.models import MeetingModel
+from commute_together.models import MeetingModel, StationModel
 
 
 # Create your views here.
@@ -17,18 +20,21 @@ def home(request):
 
 
 def new_meeting(request):
+	
 	if request.method == 'POST':
 		form = MeetingForm(request.POST)
 		if form.is_valid():
 			new_meeting = form.save()
 			return redirect(new_meeting)
+
 	elif request.method == 'GET':
 		form = MeetingForm(initial={
 			'place': request.GET.get('place', ''),
 			'date': request.GET.get('date', ''),
 			'name': request.GET.get('name', '')
 			})
-		return render(request, 'new_meeting.html', {'form': form})
+
+	return render(request, 'new_meeting.html', {'form': form})
 
 
 def meeting(request, meeting_id):
@@ -43,4 +49,16 @@ def suburban_board(request):
 	board_KS = json.loads(board_KS)
 	board['threads'] += board_KS['threads']
 	return render(request, 'board.html', {'board': board})
+
+
+
+def station_name_hints(request):
+	if request.method == 'GET':
+		value = request.GET['query']
+
+		query = StationModel.objects.filter(name__startswith=value)
+		suggestions = [{'value': station.name, 'data': station.name} for station in query]
+
+		return JsonResponse({'suggestions' :suggestions}, safe=False)
+
 

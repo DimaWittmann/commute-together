@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     url(r'^meeting/(\d+)/$', 'commute_together.views.meeting', name='meeting'),
     url(r'^meeting/$', 'commute_together.views.home', name='home'),
  	url(r'^meeting/suburban$', 'commute_together.views.suburban_board', name='home'),
-       
+    url(r'^meeting/api/station_name_hints/', 'commute_together.views.station_name_hints')
 )

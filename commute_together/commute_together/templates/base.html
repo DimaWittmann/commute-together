@@ -2,11 +2,28 @@
 <html>
 <head>
 	<title>{% block title %} {% endblock %}</title>
+
 </head>
 <body>
 
 	{% block content %} 
 	{% endblock %}
 
+	{% load staticfiles %}
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+
+	<script type="text/javascript" src="{% static 'jquery.autocomplete.js' %}"></script>
+	<script>
+		$(document).ready(function() {
+
+			$("#id_name").autocomplete({
+				serviceUrl: '/meeting/api/station_name_hints/',
+				width: 50,
+				onSelect: function(data, value){}
+				
+			});
+
+		});
+	</script>
 </body>
 </html>

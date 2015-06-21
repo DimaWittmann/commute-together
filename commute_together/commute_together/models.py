@@ -11,3 +11,8 @@ class MeetingModel(models.Model):
 	def get_absolute_url(self):
 		return reverse('meeting', args=[self.id])
 
+
+class StationModel(models.Model):
+	name = models.CharField(max_length=40, unique=True)
+	code = models.CharField(max_length=40)
+
