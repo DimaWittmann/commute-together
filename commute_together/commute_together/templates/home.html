@@ -7,6 +7,6 @@
 	</form>
 
 	{% for item in appointments %}
-		<span><a href="/meeting/{{item.id}}">{{item.name}}</a>:{{item.date}}</span>
+		<div><a href="/meeting/{{item.id}}">{{item.name}}</a>:{{item.date}}</div>
 	{% endfor %}
 {% endblock %}

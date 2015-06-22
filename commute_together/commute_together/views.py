@@ -1,6 +1,8 @@
 import json
 import urllib
 import re
+from datetime import datetime, date
+
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
@@ -28,9 +30,16 @@ def new_meeting(request):
 			return redirect(new_meeting)
 
 	elif request.method == 'GET':
+		appointment = datetime.now()
+
+		t = request.GET.get('date', None)
+		if t:
+			t = datetime.strptime(t, '%H:%M:%S')
+			appointment = datetime.combine( date.today(), t.time())
+
 		form = MeetingForm(initial={
 			'place': request.GET.get('place', ''),
-			'date': request.GET.get('date', ''),
+			'date': appointment.strftime('%Y-%m-%d %H:%M'),
 			'name': request.GET.get('name', '')
 			})
 

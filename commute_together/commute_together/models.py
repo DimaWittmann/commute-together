@@ -3,8 +3,8 @@ from django.core.urlresolvers import reverse
 
 # Create your models here.
 class MeetingModel(models.Model):
-	name = models.CharField(max_length=40)
-	date = models.CharField(max_length=40)
+	name = models.CharField(max_length=255)
+	date = models.DateTimeField()
 	desc = models.TextField()
 	place = models.CharField(max_length=80)
 

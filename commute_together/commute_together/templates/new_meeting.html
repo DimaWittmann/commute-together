@@ -7,4 +7,34 @@
 		{{ form.as_p }}
 		<input type="submit" value="Add appointment">
 	</form>
+
+{% endblock %}
+
+{% block script %}
+	{% load staticfiles %}
+	<script type="text/javascript" src="{% static 'jquery.autocomplete.js' %}"></script>
+	<script src="{% static 'jquery.datetimepicker.js' %}"></script>
+
+
+	<script>
+
+		$(document).ready(function() {
+
+			$("#id_place").autocomplete({
+				serviceUrl: '/meeting/api/station_name_hints/',
+				width: 150,
+				onSelect: function(data, value){}
+
+			});
+
+		});
+
+		$(document).ready(function() {
+			$('#id_date').datetimepicker({
+				format: 'Y-m-d H:i'
+			});
+			$('#id_date').attr('autocomplete', 'off');
+		});
+
+	</script>
 {% endblock %}
