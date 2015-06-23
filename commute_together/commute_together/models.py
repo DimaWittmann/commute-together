@@ -16,3 +16,5 @@ class StationModel(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	code = models.CharField(max_length=40)
 
+
+

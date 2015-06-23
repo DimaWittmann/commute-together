@@ -37,7 +37,7 @@ def get_thread_stations(thread_id):
 	return get_json(url)
 
 
-def get_threads_between_stations(from_id, to_id):
+def get_threads_between_stations(from_name, to_name):
 	"""
 	https://api.rasp.yandex.net/v1.0/search/ ?
   apikey=<ключ> 
@@ -50,6 +50,10 @@ def get_threads_between_stations(from_id, to_id):
 & [system=<текущая система кодирования>]
 & [page=<страница>]
 	"""
+	from_id = StationModel.objects.get(name=from_name).code
+	to_id = StationModel.objects.get(name=to_name).code
+
+	print (from_id)
 
 	params = parse.urlencode({
 		'apikey': RASP_KEY,
@@ -62,7 +66,7 @@ def get_threads_between_stations(from_id, to_id):
 
 	url = 'https://api.rasp.yandex.net/v1.0/search/?%s' % params
 	
-	get_json(url)
+	return get_json(url)
 
 
 def get_stations_trips(station_id):
@@ -87,7 +91,7 @@ def get_stations_trips(station_id):
 
 	url = 'https://api.rasp.yandex.net/v1.0/schedule/?%s' % params 
 	
-	get_json(url)
+	return get_json(url)
 
 
 def load_stations_to_db():

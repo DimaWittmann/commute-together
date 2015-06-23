@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     url(r'^meeting/new/', 'commute_together.views.new_meeting', name='new_meeting'),
     url(r'^meeting/(\d+)/$', 'commute_together.views.meeting', name='meeting'),
     url(r'^meeting/$', 'commute_together.views.home', name='home'),
- 	url(r'^meeting/suburban$', 'commute_together.views.suburban_board', name='home'),
-    url(r'^meeting/api/station_name_hints/', 'commute_together.views.station_name_hints')
+	url(r'^meeting/schedule/', 'commute_together.views.schedule', name='schedule'),
+
+    url(r'^meeting/api/station_name_hints/', 'commute_together.views.station_name_hints'),
+    url(r'^meeting/api/get_schedule/', 'commute_together.views.get_schedule'),
 )

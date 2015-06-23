@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="jumbotron">
+		<h1>Suburban trains schedule</h1>
+	</div>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Departure</th>
+				<th><input id="id_from" type="text" placeholder="Station" autocomplete="off"></input></th>
+				<th>Arrival</th>
+				<th><input id="id_to" type="text" placeholder="Station" autocomplete="off"></input></th>
+			</tr>
+		</thead>
+
+		<tbody>
+
+		</tbody>
+
+	</table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+
+	var load_board = function() {
+
+		var f = $("#id_from").val();
+		var t = $("#id_to").val();
+
+		url = '/meeting/api/get_schedule/?from=' + f + '&to=' + t;
+
+		$.getJSON(url, function(data){
+			$('tbody').html('');
+			$.each(data.threads, function(index){
+
+				var row = $("<tr></tr>");
+
+				var col = $("<td></td>");
+				col.html("<span class='label label-default'>"+ data.threads[index].thread.title + "</span>");
+				row.append(col);
+
+
+				col = $("<td></td>");
+				col.html("<span class='label label-success'>"+ data.threads[index].departure + "</span>");
+				row.append(col);
+
+				col = $("<td></td>");
+
+				var url ="http://localhost:8000/meeting/new/";
+				url += "?place=" + data.threads[index].from.title;
+				url += "&date=" + data.threads[index].departure;
+				url += "&name=" + data.threads[index].thread.title + " by " + data.threads[index].thread.transport_type 
+
+				var a = $("<a></a>", {
+					href : url,
+					text :data.threads[index].from.title,
+					"class" : "btn btn-primary btn-block"
+				});
+				col.html(a);
+
+				row.append(col);
+
+				col = $("<td></td>");
+				col.html("<span class='label label-default'>"+ data.threads[index].arrival + "</span>");
+				row.append(col);
+
+				col = $("<td></td>");
+				col.html("<span class='label label-default'>"+ data.threads[index].to.title + "</span>");
+				row.append(col);
+
+				$('tbody').append(row)
+			});
+		});
+	}
+
+	$(document).ready(function() {
+		var from_ready = false;
+		var to_ready = false;
+		$("#id_from").autocomplete({
+			serviceUrl: '/meeting/api/station_name_hints/',
+			width: 150,
+			onSelect: function(data, value){
+				from_ready = true;
+				if (from_ready && to_ready){
+					load_board();
+				}
+			}
+		});
+		$("#id_to").autocomplete({
+			serviceUrl: '/meeting/api/station_name_hints/',
+			width: 150,
+			onSelect: function(data, value){
+				to_ready = true;
+				if (from_ready && to_ready){
+					load_board();
+				}
+			}
+		});
+	});
+
+
+
+</script>
+{% endblock %}

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	{% load staticfiles %}
 	<title>{% block title %} {% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'jquery.datetimepicker.css' %}"/>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
 </head>
 <body>
@@ -12,7 +14,9 @@
 	{% endblock %}
 
 <script src="http://code.jquery.com/jquery.min.js"></script>
-
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'jquery.autocomplete.js' %}"></script>
+<script src="{% static 'jquery.datetimepicker.js' %}"></script>
 {% block script %}
 {% endblock %}
 </body>
