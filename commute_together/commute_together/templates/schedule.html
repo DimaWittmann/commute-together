@@ -6,6 +6,12 @@
 	<div class="jumbotron">
 		<h1>Suburban trains schedule</h1>
 	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<a href="/meeting/"class="btn btn-default" type="submit">Back </a>
+		</div>
+	</div>
+	</br>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -53,7 +59,7 @@
 
 				col = $("<td></td>");
 
-				var url ="http://localhost:8000/meeting/new/";
+				var url ="/meeting/new/";
 				url += "?place=" + data.threads[index].from.title;
 				url += "&date=" + data.threads[index].departure;
 				url += "&name=" + data.threads[index].thread.title + " by " + data.threads[index].thread.transport_type 

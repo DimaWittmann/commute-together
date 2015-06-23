@@ -1,1 +1,3 @@
-# Commute by train/ship/plate together with your friends
+# Commute together
+
+## Find your freinds and acquaintances who use the same transport for commuting 

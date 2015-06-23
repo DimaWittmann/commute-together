@@ -2,7 +2,27 @@
 
 {% block title %}{{meeting.name}}{% endblock %}
 {% block content %}	
-		<div><span>{{meeting.name}}: {{meeting.date}} at  {{meeting.place}}</span></div>
+<div class="container">
+	<div class="jumbotron">
+		<h2 class="well">{{meeting.name}}</h2>
 
-		<div>{{meeting.desc}}</div>
+		<div class="row">
+			<div class="col-md-1 label label-default">When:</div>
+			<div class="col-md-offset-1 col-md-4 well">{{meeting.date}}</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-1 label label-default">Where:</div>
+			<div class="col-md-offset-1 col-md-4 well">{{meeting.place}}</div>
+		</div>
+
+		<div class="well">{{meeting.desc}}</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<a href="/meeting/"class="btn btn-default" type="submit">Back </a>
+		</div>
+	</div>
+	
+</div>
 {% endblock %}

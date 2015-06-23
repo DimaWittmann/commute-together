@@ -6,7 +6,7 @@
 	<div class="jumbotron">
 		<h1>Recent appointment</h1>
 	</div>
-	<div class="row well">
+	<div class="row">
 		<div class="col-md-2">
 			<a href="/meeting/new/"class="btn btn-default" type="submit">New appointment </a>
 		</div>
@@ -14,13 +14,14 @@
 			<a href="/meeting/schedule/"class="btn btn-default" type="submit">Suburban trains schedule</a>
 		</div>
 	</div>
+	</br>
 
 	{% for item in appointments %}
 	<div class="row">
-		<div class="col-md-5 well">
+		<div class="col-md-offset-1 col-md-5 well">
 			<a href="/meeting/{{item.id}}">{{item.name}}</a>
 		</div>
-		<div class="col-md-2 well">
+		<div class="col-md-offset-1 col-md-2 well">
 			{{item.date}}
 		</div>
 	</div>
