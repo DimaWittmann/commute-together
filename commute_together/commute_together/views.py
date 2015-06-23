@@ -17,7 +17,7 @@ import commute_together.utils as utils
 
 def home(request):
 	form = MeetingForm()
-	appointments = MeetingModel.objects.all()
+	appointments = MeetingModel.objects.order_by('date').all().reverse()
 	return render(request, 'home.html', {'appointments': appointments})
 
 

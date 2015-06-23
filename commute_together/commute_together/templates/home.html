@@ -2,11 +2,29 @@
 
 {% block title %}Commute together{% endblock %}
 {% block content %}
-	<form action="/meeting/new/" method="GET">
-		<input type="submit" value="New appointment">
-	</form>
+<div class="container">
+	<div class="jumbotron">
+		<h1>Recent appointment</h1>
+	</div>
+	<div class="row well">
+		<div class="col-md-2">
+			<a href="/meeting/new/"class="btn btn-default" type="submit">New appointment </a>
+		</div>
+		<div class="col-md-2">
+			<a href="/meeting/schedule/"class="btn btn-default" type="submit">Suburban trains schedule</a>
+		</div>
+	</div>
 
 	{% for item in appointments %}
-		<div><a href="/meeting/{{item.id}}">{{item.name}}</a>:{{item.date}}</div>
+	<div class="row">
+		<div class="col-md-5 well">
+			<a href="/meeting/{{item.id}}">{{item.name}}</a>
+		</div>
+		<div class="col-md-2 well">
+			{{item.date}}
+		</div>
+	</div>
+
 	{% endfor %}
+</div>
 {% endblock %}
