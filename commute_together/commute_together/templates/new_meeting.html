@@ -16,27 +16,43 @@
 		{% csrf_token %}
 		
 			<div class="form-group">
-				{{ form.name.errors }}
+				{% if form.name.errors %}
+					<div class="alert alert-danger" role="alert">
+						{{ form.name.errors }}
+					</div>
+				{% endif %}
 				{{ form.name.label_tag }} 
 				{{ form.name }}
 			</div>
 
 			<div class="row">
 				<div class="form-group col-sm-5">
-					{{ form.date.errors }}
+					{% if form.date.errors %}
+						<div class="alert alert-danger" role="alert">
+							{{ form.date.errors }}
+						</div>
+					{% endif %}
 					{{ form.date.label_tag }} 
 					{{ form.date }}
 				</div>
 				<div class="col-sm-2"></div>
 				<div class="form-group  col-sm-5">
-					{{ form.place.errors }}
+					{% if form.place.errors %}
+						<div class="alert alert-danger" role="alert">
+							{{ form.place.errors }}
+						</div>
+					{% endif %}
 					{{ form.place.label_tag }} 
 					{{ form.place }}
 				</div>
 			</div>
 
 			<div class="form-group">
-				{{ form.desc.errors }}
+				{% if form.desc.errors %}
+					<div class="alert alert-danger" role="alert">
+						{{ form.desc.errors }}
+					</div>
+				{% endif %}
 				{{ form.desc.label_tag }} 
 				{{ form.desc }}
 			</div>

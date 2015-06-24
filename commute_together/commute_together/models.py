@@ -11,10 +11,21 @@ class MeetingModel(models.Model):
 	def get_absolute_url(self):
 		return reverse('meeting', args=[self.id])
 
+	class Meta:
+		ordering = ('date', )
+
 
 class StationModel(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	code = models.CharField(max_length=40)
 
 
+class CommentModel(models.Model):
+	author_name = models.CharField(max_length=80)
+	comment = models.CharField(max_length=255)
+	meeting = models.ForeignKey(MeetingModel)
+	timestamp = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		ordering = ('-timestamp',)
 

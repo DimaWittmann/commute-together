@@ -3,12 +3,12 @@ import urllib
 import re
 from datetime import datetime, date
 
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.utils.timezone import localtime
 
-from commute_together.forms import MeetingForm
-from commute_together.models import MeetingModel, StationModel
+from commute_together.forms import MeetingForm, CommentForm
+from commute_together.models import MeetingModel, StationModel, CommentModel
 import commute_together.utils as utils
 
 # Create your views here.
@@ -47,8 +47,9 @@ def new_meeting(request):
 
 
 def meeting(request, meeting_id):
+	form = CommentForm()
 	meeting = get_object_or_404(MeetingModel, pk=meeting_id)
-	return render(request, 'meeting.html', {'meeting': meeting})
+	return render(request, 'meeting.html', {'meeting': meeting, 'form': form})
 
 
 def schedule(request):
@@ -76,3 +77,21 @@ def station_name_hints(request):
 		return JsonResponse({'suggestions' :suggestions}, safe=False)
 
 
+def add_comment(request):
+	if request.method == 'POST':
+		meeting_id = request.POST.get('meeting_id')
+		author_name = request.POST.get('author_name')
+		comment = request.POST.get('comment')
+
+		meeting = get_object_or_404(MeetingModel, pk=meeting_id)
+
+		comm = CommentModel(author_name=author_name, comment=comment, meeting=meeting)		
+	
+		comm.save()
+
+		response = {}
+		response['author_name'] = author_name
+		response['comment'] = comment
+		response['date'] = localtime(comm.timestamp).strftime('%B %d, %Y %I:%M %p')
+
+		return JsonResponse(response, safe=False)

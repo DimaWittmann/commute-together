@@ -14,4 +14,5 @@ urlpatterns = patterns('',
 
     url(r'^meeting/api/station_name_hints/', 'commute_together.views.station_name_hints'),
     url(r'^meeting/api/get_schedule/', 'commute_together.views.get_schedule'),
+    url(r'^meeting/api/add_comment/$', 'commute_together.views.add_comment')
 )
