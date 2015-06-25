@@ -7,9 +7,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.utils.timezone import localtime
 
+
 from commute_together.forms import MeetingForm, CommentForm
 from commute_together.models import MeetingModel, StationModel, CommentModel
+from commute_together.settings import VK_APP_ID, VK_API_SECRET
 import commute_together.utils as utils
+
+
 
 # Create your views here.
 
@@ -18,7 +22,7 @@ import commute_together.utils as utils
 def home(request):
 	form = MeetingForm()
 	appointments = MeetingModel.objects.order_by('date').all().reverse()
-	return render(request, 'home.html', {'appointments': appointments})
+	return render(request, 'home.html', {'appointments': appointments, 'client_id': VK_APP_ID})
 
 
 def new_meeting(request):
@@ -45,6 +49,23 @@ def new_meeting(request):
 
 	return render(request, 'new_meeting.html', {'form': form})
 
+
+def vklogin(request):
+	if request.method == 'GET':
+		code = request.GET.get('code', None)
+		if code:
+			params = {
+				'client_id': VK_APP_ID,
+				'client_secret': VK_API_SECRET,
+				'code': code,
+				'redirect_uri': 'dimawittmann.pythonanywhere.com/meeting/vklogin'
+			}
+			url = 'https://oauth.vk.com/access_token'
+			json_response = utils.get_json(url, params)
+			return JsonResponse(json_response)
+		else:
+			print (request.GET.get('error'), '')
+			print (request.GET.get('error_description'), '')
 
 def meeting(request, meeting_id):
 	form = CommentForm()
@@ -86,7 +107,7 @@ def add_comment(request):
 		meeting = get_object_or_404(MeetingModel, pk=meeting_id)
 
 		comm = CommentModel(author_name=author_name, comment=comment, meeting=meeting)		
-	
+
 		comm.save()
 
 		response = {}

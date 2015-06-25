@@ -7,7 +7,9 @@ from commute_together.models import StationModel
 RASP_KEY = '396585a1-6eef-41c8-b63c-2ad283b1c38f'
 
 
-def get_json(url):
+def get_json(url, params):
+	url = url +'?'+ parse.urlencode(params)
+
 	req = request.urlopen(url)
 	encoding = req.headers.get_content_charset()
 	data = json.loads(req.read().decode(encoding))
@@ -25,16 +27,16 @@ def get_thread_stations(thread_id):
 & [show_systems=<коды в ответе>]
 	"""
 
-	params = parse.urlencode({
+	params = {
 		'apikey': RASP_KEY,
 		'format': 'json',
 		'uid': thread_id,
 		'lang': 'ua'
-	})
+	}
 
-	url = 'https://api.rasp.yandex.net/v1.0/thread/?%s' % params
+	url = 'https://api.rasp.yandex.net/v1.0/thread/'
 	
-	return get_json(url)
+	return get_json(url, params)
 
 
 def get_threads_between_stations(from_name, to_name):
@@ -55,18 +57,18 @@ def get_threads_between_stations(from_name, to_name):
 
 	print (from_id)
 
-	params = parse.urlencode({
+	params = {
 		'apikey': RASP_KEY,
 		'format': 'json',
 		'from': from_id,
 		'to': to_id,
 		'lang': 'ua',
 		'transport_types': 'suburban'
-	})
+	}
 
-	url = 'https://api.rasp.yandex.net/v1.0/search/?%s' % params
+	url = 'https://api.rasp.yandex.net/v1.0/search/'
 	
-	return get_json(url)
+	return get_json(url, params)
 
 
 def get_stations_trips(station_id):
@@ -81,17 +83,19 @@ def get_stations_trips(station_id):
 & [system=<текущая система кодирования>]
 & [show_systems=<коды в ответе>]
 	"""
-	params = parse.urlencode({
+	params = {
 		'apikey': RASP_KEY,
 		'format': 'json',
 		'station': station_id,
 		'lang': 'ua',
 		'transport_types': 'suburban'
-	})
+	}
 
-	url = 'https://api.rasp.yandex.net/v1.0/schedule/?%s' % params 
+	url = 'https://api.rasp.yandex.net/v1.0/schedule/'
 	
-	return get_json(url)
+	return get_json(url, params)
+
+
 
 
 def load_stations_to_db():
