@@ -6,7 +6,8 @@ from datetime import datetime, date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.utils.timezone import localtime
-
+from django.contrib import messages
+from django.contrib.auth import authenticate
 
 from commute_together.forms import MeetingForm, CommentForm
 from commute_together.models import MeetingModel, StationModel, CommentModel
@@ -58,14 +59,24 @@ def vklogin(request):
 				'client_id': VK_APP_ID,
 				'client_secret': VK_API_SECRET,
 				'code': code,
-				'redirect_uri': 'dimawittmann.pythonanywhere.com/meeting/vklogin'
+				 'redirect_uri': 'http://dimawittmann.pythonanywhere.com/meeting/vklogin'
 			}
 			url = 'https://oauth.vk.com/access_token'
 			json_response = utils.get_json(url, params)
-			return JsonResponse(json_response)
+
+			user = authenticate(user_info = json_response)
+			if user:
+				request.session['user_id'] = user.id
+				messages.info(request, 'Hello ' + user.first_name + ' ' + user.last_name)
+			else:
+				messages.error(request, 'Error during authentication')
 		else:
-			print (request.GET.get('error'), '')
-			print (request.GET.get('error_description'), '')
+			messages.error(request, request.GET.get('error', ''))
+			messages.error(request, request.GET.get('error_description', ''))
+
+	return redirect('home')
+
+
 
 def meeting(request, meeting_id):
 	form = CommentForm()

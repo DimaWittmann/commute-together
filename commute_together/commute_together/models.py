@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 class MeetingModel(models.Model):
@@ -29,3 +30,9 @@ class CommentModel(models.Model):
 	class Meta:
 		ordering = ('-timestamp',)
 
+
+class VkUser(models.Model):
+	user = models.OneToOneField(User, primary_key=True)
+	access_token = models.CharField(max_length=255)
+	vkuser_id = models.IntegerField()
+	photo = models.CharField(max_length=255)

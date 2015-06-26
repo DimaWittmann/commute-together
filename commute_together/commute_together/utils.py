@@ -11,7 +11,7 @@ def get_json(url, params):
 	url = url +'?'+ parse.urlencode(params)
 
 	req = request.urlopen(url)
-	encoding = req.headers.get_content_charset()
+	encoding = req.headers.get_content_charset() or 'utf-8'
 	data = json.loads(req.read().decode(encoding))
 	return data
 

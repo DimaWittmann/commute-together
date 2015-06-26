@@ -52,6 +52,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+AUTHENTICATION_BACKENDS =(
+    'commute_together.vk_backend.VkBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 ROOT_URLCONF = 'commute_together.urls'
 
 WSGI_APPLICATION = 'commute_together.wsgi.application'
@@ -85,6 +90,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT ='/home/DimaWittmann/commute_together/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
