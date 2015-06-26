@@ -81,7 +81,7 @@ def vklogin(request):
 def meeting(request, meeting_id):
 	form = CommentForm()
 	meeting = get_object_or_404(MeetingModel, pk=meeting_id)
-	return render(request, 'meeting.html', {'meeting': meeting, 'form': form})
+	return render(request, 'meeting.html', {'meeting': meeting, 'form': form, 'VK_APP_ID': VK_APP_ID})
 
 
 def schedule(request):

@@ -47,6 +47,8 @@
 			</div>
 		</div>
 	</form>
+	<div id="vk_comments"></div>
+
 
 	<div id="comments">
 	{% for c in meeting.commentmodel_set.all %}
@@ -60,20 +62,22 @@
 	{% endfor %}
 	</div>
 </div>
-
 {% endblock %}
-
-
-
-
-
-
-
 
 
 
 {% block script %}
 	<script>
+		VK.init({
+			apiId: {{VK_APP_ID}},
+			onlyWidgets: true
+		});
+
+		VK.Widgets.Comments('vk_comments');
+	</script>
+
+	<script>
+
 		$(document).ready(function() {
 			$('label').addClass('control-label col-sm-2');
 			$('input').addClass('form-control');
