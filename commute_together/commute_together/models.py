@@ -2,6 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.timezone import localtime
+from commute_together.settings import DATETIME_FORMAT
 
 # Create your models here.
 class MeetingModel(models.Model):
@@ -22,7 +23,7 @@ class MeetingModel(models.Model):
 		result['author_photo'] = self.user.vkuser.photo
 		result['id'] = self.id
 		result['title'] = self.name
-		result['date'] = localtime(self.date).strftime('%d-%m-%Y %H:%M')
+		result['date'] = localtime(self.date).strftime('%d.%m.%Y %H:%M')   #TODO use better solution
 		result['desc'] = self.desc
 		result['place'] = self.place
 		return result

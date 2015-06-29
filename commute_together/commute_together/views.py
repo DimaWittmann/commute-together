@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 from commute_together.forms import MeetingForm, CommentForm
 from commute_together.models import MeetingModel, StationModel, CommentModel
-from commute_together.settings import VK_APP_ID, VK_API_SECRET, LOGIN_URL
+from commute_together.settings import VK_APP_ID, VK_API_SECRET, LOGIN_URL, DATETIME_FORMAT
 import commute_together.utils as utils
 
 
@@ -23,7 +23,7 @@ import commute_together.utils as utils
 def home(request):
 	form = MeetingForm()
 	appointments = MeetingModel.objects.order_by('date').all().reverse()
-	return render(request, 'home.html', {'appointments': appointments, 'login_url': LOGIN_URL, 'logged_in': 'user_id' in request.session})
+	return render(request, 'home.html', {'appointments': appointments, 'login_url': LOGIN_URL, 'logged_in': 'user_id' in request.session, 'DATETIME_FORMAT': DATETIME_FORMAT})
 
 
 def new_meeting(request):
@@ -48,11 +48,11 @@ def new_meeting(request):
 
 		form = MeetingForm(initial={
 			'place': request.GET.get('place', ''),
-			'date': appointment.strftime('%Y-%m-%d %H:%M'),
+			'date': appointment.strftime('%d.%m.%Y %H:%M'),
 			'name': request.GET.get('name', '')
 			})
 
-	return render(request, 'new_meeting.html', {'form': form})
+	return render(request, 'new_meeting.html', {'form': form, 'DATETIME_FORMAT': DATETIME_FORMAT})
 
 
 def vklogin(request):
@@ -85,7 +85,7 @@ def vklogin(request):
 def meeting(request, meeting_id):
 	form = CommentForm()
 	meeting = get_object_or_404(MeetingModel, pk=meeting_id)
-	return render(request, 'meeting.html', {'meeting': meeting, 'form': form, 'VK_APP_ID': VK_APP_ID})
+	return render(request, 'meeting.html', {'meeting': meeting, 'form': form, 'VK_APP_ID': VK_APP_ID, 'DATETIME_FORMAT': DATETIME_FORMAT})
 
 
 def schedule(request):
@@ -112,32 +112,11 @@ def station_name_hints_JSON(request):
 
 		return JsonResponse({'suggestions' :suggestions}, safe=False)
 
-
-def add_comment(request):
-	if request.method == 'POST':
-		meeting_id = request.POST.get('meeting_id')
-		author_name = request.POST.get('author_name')
-		comment = request.POST.get('comment')
-
-		meeting = get_object_or_404(MeetingModel, pk=meeting_id)
-
-		comm = CommentModel(author_name=author_name, comment=comment, meeting=meeting)		
-
-		comm.save()
-
-		response = {}
-		response['author_name'] = author_name
-		response['comment'] = comment
-		response['date'] = localtime(comm.timestamp).strftime('%Y-%m-%d %H:%M')
-
-		return JsonResponse(response, safe=False)
-
-
 def get_board_JSON(request):
 	if request.method == 'GET':
 		date = request.GET.get('date', None)
 		station = request.GET.get('from_station', '')
-		only_friends = request.GET.get('friends', None) #1 0
+		only_friends = request.GET.get('friends', None) #is equal 1 the True
 		page = request.GET.get('page', 1)
 
 		print(date)
@@ -145,7 +124,7 @@ def get_board_JSON(request):
 		qs = MeetingModel.objects
 
 		if date:
-			date = datetime.strptime(date, '%d-%m-%Y %H:%M')
+			date = datetime.strptime(date, '%d.%m.%Y %H:%M')   # is it required?
 			qs = qs.filter(date__gte=date)
 		else:
 			qs = qs.filter(date__gte=datetime.now())

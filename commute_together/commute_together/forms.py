@@ -1,12 +1,29 @@
 from django import forms
 
 from commute_together.models import MeetingModel, CommentModel
+from commute_together.settings import DATETIME_FORMAT
 
 class MeetingForm(forms.models.ModelForm):
 	
 	class Meta:
 		model = MeetingModel
 		fields = ['name', 'date', 'desc', 'place']
+
+		widgets = {
+			'name': forms.widgets.TextInput(
+				attrs={'required': True, }
+			),
+			'date': forms.widgets.DateTimeInput(
+				attrs={'required': True, 'autocomplete': 'off'}, 
+				format=DATETIME_FORMAT
+			),
+			'desc': forms.widgets.DateTimeInput(
+				attrs={'required': True}
+			),
+			'place': forms.widgets.DateTimeInput(
+				attrs={'required': True}
+			),
+		}
 
 	def save(self, user):
 		self.instance.user = user

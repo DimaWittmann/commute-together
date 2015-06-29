@@ -72,7 +72,6 @@
 			$('input').addClass("form-control");
 			$('textarea').addClass("form-control");
 			$('textarea').attr("row", "5");
-			$('#id_date').attr('autocomplete', 'off');
 		}); 
 
 		$(document).ready(function() {
@@ -84,7 +83,7 @@
 
 			});
 			$('#id_date').datetimepicker({
-				format: 'Y-m-d H:i'
+				format: '{{DATETIME_FORMAT}}'
 			});
 
 		});

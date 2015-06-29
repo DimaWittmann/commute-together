@@ -16,6 +16,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
+DATETIME_FORMAT = 'd.m.Y H:i'
+DATE_FORMAT = 'd.m.Y'
+TIME_FORMAT = 'H:i'
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xg_v6tdn3f28qqtq1nx&y0a18*)0d#-m-j!^!x@p$0js3gnju5'
 
