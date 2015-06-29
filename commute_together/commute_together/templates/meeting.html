@@ -18,49 +18,18 @@
 		</div>
 
 		<div class="well">{{meeting.desc}}</div>
+		<div id="vk_like"></div>
 	</div>
 
 
 	<div class="row">
 		<div class="col-sm-2">
-			<a href="/meeting/"class="btn btn-default" type="submit">Back</a>
+			<a href="/meeting/" class="btn btn-default">Back</a>
 		</div>
 	</div>
 
-
-
-	<form id="id_form" action="/meeting/api/add_comment/" method="POST" role="form" class="form-horizontal">
-		{% csrf_token %}
-		{% for field in form %}
-			<div class="form-group">
-				{{ field.errors }}
-				{{ field.label_tag }}
-				<div class="col-sm-8">
-					{{ field }}
-				</div>
-
-			</div>
-		{% endfor %}
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-8">
-				<input class="btn btn-default" type="submit" value="Add comment">
-			</div>
-		</div>
-	</form>
 	<div id="vk_comments"></div>
 
-
-	<div id="comments">
-	{% for c in meeting.commentmodel_set.all %}
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div>{{ c.author_name }}</div>
-				<div class="panel-body">{{c.comment}} </br>{{c.timestamp}} </div>
-			</div>
-		</div>
-	{% endfor %}
-	</div>
 </div>
 {% endblock %}
 
@@ -74,6 +43,7 @@
 		});
 
 		VK.Widgets.Comments('vk_comments');
+		VK.Widgets.Like('vk_like', {'type': 'button'});
 	</script>
 
 	<script>

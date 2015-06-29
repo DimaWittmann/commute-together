@@ -8,6 +8,10 @@ class MeetingForm(forms.models.ModelForm):
 		model = MeetingModel
 		fields = ['name', 'date', 'desc', 'place']
 
+	def save(self, user):
+		self.instance.user = user
+		return super().save()
+
 
 class CommentForm(forms.models.ModelForm):
 	

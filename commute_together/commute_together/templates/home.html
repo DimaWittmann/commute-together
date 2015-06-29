@@ -8,27 +8,105 @@
 	</div>
 	<div class="row">
 		<div class="col-md-2">
-			<a href="/meeting/new/"class="btn btn-default" type="submit">New appointment </a>
+			<a href="{% url 'new_meeting' %}"class="btn btn-default" type="submit">New appointment </a>
 		</div>
+
 		<div class="col-md-2">
-			<a href="/meeting/schedule/" class="btn btn-default" type="submit">Suburban trains schedule</a>
+			<a href="{%url 'schedule' %}" class="btn btn-default" type="submit">Suburban trains schedule</a>
 		</div>
+
+		{% if not logged_in %}
 		<div class="col-md-2">
-			<a href="http://oauth.vk.com/authorize?client_id={{client_id}}&scope=email,offline&redirect_uri=http://dimawittmann.pythonanywhere.com/meeting/vklogin&response_type=code&v=5.34" class="btn btn-default" class="btn btn-info" title="Login with VK">Login with VK</a>
+			<a href="{{login_url}}" class="btn btn-default" class="btn btn-info" title="Login with VK">Login with VK</a>
 		</div>
+		{% endif %}
 	</div>
 	</br>
-
-	{% for item in appointments %}
 	<div class="row">
-		<div class="col-md-offset-1 col-md-5 well">
-			<a href="/meeting/{{item.id}}">{{item.name}}</a>
+		<div class="col-md-3">
+			<input id="id_date" type="text" placeholder="Date:"/>
 		</div>
-		<div class="col-md-offset-1 col-md-2 well">
-			{{item.date}}
-		</div>
-	</div>
 
-	{% endfor %}
+		<div class="col-md-3">
+			<input id="from_station" type="text" placeholder="Station:"/>
+		</div>
+
+		<div class="col-md-3">
+			<p>Friends only: <input id="friend_only_check" type="checkbox"/></p>
+		</div>
+
+	</div>
+	<br>
+	<div id="board"></div>
+
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+	$(document).ready(function() {
+
+		$("#from_station").autocomplete({
+			serviceUrl: '{% url "station_name_hints" %}',
+			width: 150,
+			onSelect: function(data, value){}
+
+		});
+
+		$('#id_date').datetimepicker({
+			format: 'd-m-Y H:i'
+		});
+
+		$('#id_date,#from_station').on('focusout', function(event){
+			load_board();
+		});
+		$('#friend_only_check').on('change', function(event){
+			load_board();
+		});
+
+	});
+
+	var load_board = function () {
+		url = "{% url 'get_meetings' %}"
+		url += "?"
+
+		if ($("#from_station").val() !== ''){
+			url += "from_station=" + $("#from_station").val();
+		}
+
+		if ($('#id_date').val() !== ''){
+			url += "&date=" + $("#id_date").val();
+		}
+
+		if($('#friend_only_check')[0].checked) {
+			url += "&friends=1";
+		}
+
+		$.getJSON(url, function(data){
+			$('#board').html('');
+			$.each(data, function(index){
+				var div_row = $('<div class="row"></div>');
+
+				var div_title = $('<div class="col-md-offset-1 col-md-5 well"></div>');
+
+				url = "/meeting/" + data[index].id;
+				var a_title = $('<a></a>');
+				a_title.attr('href', url);
+				a_title.html(data[index].title);
+				div_title.append(a_title);
+
+				var div_date = $('<div class="col-md-offset-1 col-md-2 well"></div>');
+				div_date.html(data[index].date);
+
+				div_row.append(div_title);
+				div_row.append(div_date);
+
+				$('#board').append(div_row);
+			});
+		});
+
+	};
+
+</script>
+
 {% endblock %}

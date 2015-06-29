@@ -30,6 +30,9 @@ VK_APP_ID = '4971550'
 VKONTAKTE_APP_ID = VK_APP_ID
 VK_API_SECRET = 'YNij1ROamWaRwB06C99P'
 VKONTAKTE_APP_SECRET = VK_API_SECRET
+
+LOGIN_URL = ('http://oauth.vk.com/authorize?client_id=%s&scope=email,offline&'
+    'redirect_uri=http://dimawittmann.pythonanywhere.com/meeting/vklogin&response_type=code&v=5.34') % (VK_APP_ID, )
 # Application definition
 
 INSTALLED_APPS = (

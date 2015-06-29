@@ -8,30 +8,34 @@ from django.http import JsonResponse
 from django.utils.timezone import localtime
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.core.paginator import Paginator
+from django.contrib.auth.models import User
 
 from commute_together.forms import MeetingForm, CommentForm
 from commute_together.models import MeetingModel, StationModel, CommentModel
-from commute_together.settings import VK_APP_ID, VK_API_SECRET
+from commute_together.settings import VK_APP_ID, VK_API_SECRET, LOGIN_URL
 import commute_together.utils as utils
 
 
 
 # Create your views here.
 
-
-
 def home(request):
 	form = MeetingForm()
 	appointments = MeetingModel.objects.order_by('date').all().reverse()
-	return render(request, 'home.html', {'appointments': appointments, 'client_id': VK_APP_ID})
+	return render(request, 'home.html', {'appointments': appointments, 'login_url': LOGIN_URL, 'logged_in': 'user_id' in request.session})
 
 
 def new_meeting(request):
+
+	if 'user_id' not in request.session:
+		return redirect(LOGIN_URL)
 	
 	if request.method == 'POST':
 		form = MeetingForm(request.POST)
 		if form.is_valid():
-			new_meeting = form.save()
+			user = User.objects.get(id=request.session['user_id'])
+			new_meeting = form.save(user)
 			return redirect(new_meeting)
 
 	elif request.method == 'GET':
@@ -87,7 +91,8 @@ def meeting(request, meeting_id):
 def schedule(request):
 	return render(request, 'schedule.html')
 
-def get_schedule(request):
+
+def get_schedule_JSON(request):
 
 	if request.method == 'GET':
 		from_station = request.GET.get('from')
@@ -98,8 +103,7 @@ def get_schedule(request):
 	return JsonResponse(board, safe=False)
 
 
-
-def station_name_hints(request):
+def station_name_hints_JSON(request):
 	if request.method == 'GET':
 		value = request.GET['query']
 
@@ -124,6 +128,36 @@ def add_comment(request):
 		response = {}
 		response['author_name'] = author_name
 		response['comment'] = comment
-		response['date'] = localtime(comm.timestamp).strftime('%B %d, %Y %I:%M %p')
+		response['date'] = localtime(comm.timestamp).strftime('%Y-%m-%d %H:%M')
 
 		return JsonResponse(response, safe=False)
+
+
+def get_board_JSON(request):
+	if request.method == 'GET':
+		date = request.GET.get('date', None)
+		station = request.GET.get('from_station', '')
+		only_friends = request.GET.get('friends', None) #1 0
+		page = request.GET.get('page', 1)
+
+		print(date)
+
+		qs = MeetingModel.objects
+
+		if date:
+			date = datetime.strptime(date, '%d-%m-%Y %H:%M')
+			qs = qs.filter(date__gte=date)
+		else:
+			qs = qs.filter(date__gte=datetime.now())
+
+		if station:
+			qs = qs.filter(place=station) 
+
+		if only_friends:
+			friends = utils.get_user_friends(user_id)
+			qs.filter(user__vkuser__vkuser_id__in=friends)
+
+		records = qs.all()
+		p = Paginator(records, 20)
+
+		return JsonResponse(list(map(lambda x: x.serialize(), p.page(page).object_list)), safe=False)

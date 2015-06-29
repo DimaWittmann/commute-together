@@ -2,7 +2,7 @@ import json
 from urllib import request, parse 
 
 
-from commute_together.models import StationModel
+from commute_together.models import StationModel, User
 
 RASP_KEY = '396585a1-6eef-41c8-b63c-2ad283b1c38f'
 
@@ -104,3 +104,15 @@ def load_stations_to_db():
 	for stop in stations['stops']:
 		station = StationModel(name=stop['station']['title'], code=stop['station']['code'])
 		station.save()
+
+
+def get_users_vkfriends(user_id):
+
+	params ={
+		'user_id': User.objects.get(id=user_id).vkuser.vkuser_id,
+	}
+
+	url = 'https://api.vk.com/method/users.get'
+
+	response = get_json(url, params)['response']['items']
+	return response

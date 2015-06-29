@@ -40,7 +40,7 @@
 		var f = $("#id_from").val();
 		var t = $("#id_to").val();
 
-		url = '/meeting/api/get_schedule/?from=' + f + '&to=' + t;
+		url = '{% url "get_schedule" %}'+'?from=' + f + '&to=' + t;
 
 		$.getJSON(url, function(data){
 			$('tbody').html('');
@@ -59,7 +59,7 @@
 
 				col = $("<td></td>");
 
-				var url ="/meeting/new/";
+				var url ="{% url 'new_meeting' %}";
 				url += "?place=" + data.threads[index].from.title;
 				url += "&date=" + data.threads[index].departure;
 				url += "&name=" + data.threads[index].thread.title + " by " + data.threads[index].thread.transport_type 
