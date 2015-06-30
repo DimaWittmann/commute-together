@@ -14,13 +14,12 @@ class MeetingForm(forms.models.ModelForm):
 				attrs={'required': True, }
 			),
 			'date': forms.widgets.DateTimeInput(
-				attrs={'required': True, 'autocomplete': 'off'}, 
-				format=DATETIME_FORMAT
+				attrs={'required': True, 'autocomplete': 'off'}
 			),
-			'desc': forms.widgets.DateTimeInput(
+			'desc': forms.widgets.Textarea(
 				attrs={'required': True}
 			),
-			'place': forms.widgets.DateTimeInput(
+			'place': forms.widgets.TextInput(
 				attrs={'required': True}
 			),
 		}

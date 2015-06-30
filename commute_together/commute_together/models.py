@@ -5,6 +5,14 @@ from django.utils.timezone import localtime
 from commute_together.settings import DATETIME_FORMAT
 
 # Create your models here.
+
+class VkUser(models.Model):
+	user = models.OneToOneField(User, primary_key=True)
+	access_token = models.CharField(max_length=255)
+	vkuser_id = models.IntegerField()
+	photo = models.CharField(max_length=255)
+
+
 class MeetingModel(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=255)
@@ -49,8 +57,3 @@ class CommentModel(models.Model):
 		ordering = ('-timestamp',)
 
 
-class VkUser(models.Model):
-	user = models.OneToOneField(User, primary_key=True)
-	access_token = models.CharField(max_length=255)
-	vkuser_id = models.IntegerField()
-	photo = models.CharField(max_length=255)

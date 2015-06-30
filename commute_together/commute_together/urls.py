@@ -12,9 +12,10 @@ urlpatterns = patterns('',
     url(r'^meeting/$', 'commute_together.views.home', name='home'),
 	url(r'^meeting/schedule/', 'commute_together.views.schedule', name='schedule'),
 	url(r'^meeting/vklogin/$', 'commute_together.views.vklogin', name='vklogin'),
+    url(r'^meeting/logout/$', 'commute_together.views.logout_view', name='logout'),
 
 
     url(r'^meeting/api/station_name_hints/', 'commute_together.views.station_name_hints_JSON', name='station_name_hints'),
     url(r'^meeting/api/get_schedule/', 'commute_together.views.get_schedule_JSON', name="get_schedule"),
-    url(r'^meeting/board/', 'commute_together.views.get_board_JSON', name="get_meetings"),
+    url(r'^meeting/api/board/', 'commute_together.views.get_board_JSON', name="get_meetings"),
 )

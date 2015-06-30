@@ -19,6 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATETIME_FORMAT = 'd.m.Y H:i'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H:i'
+DATETIME_INPUT_FORMATS = ('%d.%m.%Y %H:%M', )
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xg_v6tdn3f28qqtq1nx&y0a18*)0d#-m-j!^!x@p$0js3gnju5'
@@ -88,7 +89,7 @@ TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
-USE_L10N = True
+#USE_L10N = True
 
 USE_TZ = True
 

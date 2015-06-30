@@ -19,6 +19,10 @@
 		<div class="col-md-2">
 			<a href="{{login_url}}" class="btn btn-default" class="btn btn-info" title="Login with VK">Login with VK</a>
 		</div>
+		{% else %}
+		<div class="col-md-2">
+			<a href="{% url 'logout' %}" class="btn btn-default" class="btn btn-info" title="Logout">Logout</a>
+		</div>
 		{% endif %}
 	</div>
 	</br>
@@ -63,6 +67,8 @@
 		$('#friend_only_check').on('change', function(event){
 			load_board();
 		});
+
+		load_board();
 
 	});
 

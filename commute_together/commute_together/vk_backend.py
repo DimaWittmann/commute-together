@@ -11,9 +11,7 @@ class VkBackend(object):
 	def authenticate(self, user_info):
 		try:
 			user = User.objects.get(email=user_info['email'])
-			print ("old user used")
 		except User.DoesNotExist:
-			print ("new user is created")
 			user = User(email=user_info['email'])
 			user.save()
 			vkuser = VkUser(user=user,
@@ -38,8 +36,8 @@ class VkBackend(object):
 		return user
 
 
-	def get_user(self, email):
+	def get_user(self, id):
 		try:
-			return User.objects.get(email=email)
+			return User.objects.get(pk=id)
 		except User.DoesNotExist:
 			return None

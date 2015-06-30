@@ -7,9 +7,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.utils.timezone import localtime
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from commute_together.forms import MeetingForm, CommentForm
 from commute_together.models import MeetingModel, StationModel, CommentModel
@@ -22,8 +23,8 @@ import commute_together.utils as utils
 
 def home(request):
 	form = MeetingForm()
-	appointments = MeetingModel.objects.order_by('date').all().reverse()
-	return render(request, 'home.html', {'appointments': appointments, 'login_url': LOGIN_URL, 'logged_in': 'user_id' in request.session, 'DATETIME_FORMAT': DATETIME_FORMAT})
+	logged = 'user_id' in request.session
+	return render(request, 'home.html', {'login_url': LOGIN_URL, 'logged_in': logged, 'DATETIME_FORMAT': DATETIME_FORMAT})
 
 
 def new_meeting(request):
@@ -56,6 +57,7 @@ def new_meeting(request):
 
 
 def vklogin(request):
+
 	if request.method == 'GET':
 		code = request.GET.get('code', None)
 		if code:
@@ -78,8 +80,15 @@ def vklogin(request):
 			messages.error(request, request.GET.get('error', ''))
 			messages.error(request, request.GET.get('error_description', ''))
 
-	return redirect('home')
+		return redirect('home')
 
+
+def logout_view(request):
+	#messages.info(request, 'Bye ' + request.user.first_name + ' ' + request.user.last_name)
+	if 'user_id' in request.session:
+		del request.session['user_id']
+	logout(request)
+	return redirect('home')
 
 
 def meeting(request, meeting_id):
@@ -119,8 +128,6 @@ def get_board_JSON(request):
 		only_friends = request.GET.get('friends', None) #is equal 1 the True
 		page = request.GET.get('page', 1)
 
-		print(date)
-
 		qs = MeetingModel.objects
 
 		if date:
@@ -133,7 +140,7 @@ def get_board_JSON(request):
 			qs = qs.filter(place=station) 
 
 		if only_friends:
-			friends = utils.get_user_friends(user_id)
+			friends = utils.get_user_friends(request.session['user_id'])
 			qs.filter(user__vkuser__vkuser_id__in=friends)
 
 		records = qs.all()
