@@ -8,6 +8,8 @@ from selenium.webdriver.common.keys import Keys
 
 
 class MainPageTestCase(LiveServerTestCase):
+	fixtures = ['StationModel.json']
+
 	def setUp(self):
 		self.selenium = webdriver.Firefox()
 
@@ -35,16 +37,5 @@ class MainPageTestCase(LiveServerTestCase):
 		to_input.send_keys(to_station)
 		from_input = self.selenium.find_element_by_id('id_from')
 
-		self.fail("Finish test")
-		row = WebDriverWait(self.selenium, 10).until(
-			expected_conditions.presence_of_element_located((By.XPATH, '//table/tbody/tr/td[3]'))
-		)
-
-		new_meeting_button = self.selenium.find_element_by_xpath('//table/tbody/tr/td[3]/a')
-		self.assertEqual(from_station, new_meeting_button.text)
-
 		
-		# Both users leave the page.
-		self.selenium.quit()
-
 

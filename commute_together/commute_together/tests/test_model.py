@@ -8,14 +8,16 @@ class MeetingModelTest(TestCase):
 
 		item = MeetingModel()
 		item.name = "Meeting"
-		item.date = "11.11.2011"
+		item.date = "2011-11-11 11:11"
 		item.desc = "description!"
+		item.place = "Station"
 		item.save()
 
 		item = MeetingModel()
 		item.name = "new Meeting"
-		item.date = "11.11.2011"
+		item.date = "2011-11-11 11:11"
 		item.desc = "new description!"
+		item.place = "Station"
 		item.save()
 
 		saved_items = MeetingModel.objects.all()
