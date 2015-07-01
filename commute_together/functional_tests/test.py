@@ -1,5 +1,10 @@
 from django.test import LiveServerTestCase
+
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.keys import Keys
 
 
 class MainPageTestCase(LiveServerTestCase):
@@ -11,57 +16,33 @@ class MainPageTestCase(LiveServerTestCase):
 		self.selenium.quit()
 
 
-	def test_new_meeting_addition(self):
+	def test_schedule_view(self):
 
 		# User opens main page
 		self.selenium.get('%s%s' % (self.live_server_url, '/meeting/'))
 
 		# User tries adding new appointment(name, description and date)
-		self.selenium.find_element_by_xpath('//input[@value="New appointment"]').click()
+		self.selenium.find_element_by_partial_link_text('Suburban').click()
+		self.selenium.implicitly_wait(1)
 
-		name = 'New meeting'
-		date = '01.01.2001 08:13'
-		desc = 'Looking for company on mornign train'
-		place = 'Klavdieve station'
-		name_input = self.selenium.find_element_by_id('id_name')
-		name_input.send_keys(name)
-		date_input = self.selenium.find_element_by_id('id_date')
-		date_input.send_keys(date)
-		desc_input = self.selenium.find_element_by_id('id_desc')
-		desc_input.send_keys(desc)
-		place_input = self.selenium.find_element_by_id('id_place')
-		place_input.send_keys(place)
-
-		self.selenium.find_element_by_xpath('//input[@value="Add appointment"]').click()
+		from_station = 'Клавдиево'
+		to_station = 'Святошин'
 
 
-		# User sees appointment page and see all info and plays to add comment
-		self.assertRegex(self.selenium.current_url, '/meeting/\d+')
-		page_text = self.selenium.find_element_by_tag_name('body').text
-		self.assertIn(name, page_text)
-		self.assertIn(date, page_text)
-		self.assertIn(place, page_text)
+		from_input = self.selenium.find_element_by_id('id_from')
+		from_input.send_keys(from_station)
+		to_input = self.selenium.find_element_by_id('id_to')
+		to_input.send_keys(to_station)
+		from_input = self.selenium.find_element_by_id('id_from')
 
+		self.fail("Finish test")
+		row = WebDriverWait(self.selenium, 10).until(
+			expected_conditions.presence_of_element_located((By.XPATH, '//table/tbody/tr/td[3]'))
+		)
 
+		new_meeting_button = self.selenium.find_element_by_xpath('//table/tbody/tr/td[3]/a')
+		self.assertEqual(from_station, new_meeting_button.text)
 
-		# New user connected
-		self.selenium.quit()
-		self.selenium = webdriver.Firefox()
-
-		# new user sees main page
-		self.selenium.get('%s%s' % (self.live_server_url, '/meeting/'))
-		page_text = self.selenium.find_element_by_tag_name('body').text
-		self.assertIn(name, page_text)
-		self.assertIn(date, page_text)
-
-		# he open the same appoitment and see all information and comment
-
-		self.selenium.get('%s%s%d' % (self.live_server_url, '/meeting/', 1))
-		page_text = self.selenium.find_element_by_tag_name('body').text
-		self.assertIn(name, page_text)
-		self.assertIn(date, page_text)
-		self.assertIn(desc, page_text)
-		self.assertIn(place, page_text)
 		
 		# Both users leave the page.
 		self.selenium.quit()
